@@ -241,6 +241,6 @@ Pull requests are welcome! Please open issues for bugs or feature requests.
 
 ---
 
-## License
+## License by
 
-MIT License
+@kimoban [Isaiah Kimoban]
