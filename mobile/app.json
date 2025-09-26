@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Konkomba Dictionary",
+    "slug": "konkomba-dictionary",
+    "scheme": "konkombadict",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "apiBaseUrl": "http://10.146.217.138:5001/api"
+    }
+  }
+}

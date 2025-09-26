@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../src/app.js';
+import app from '../app.js';
 describe('Dictionary API', () => {
   it('GET /api/words returns array', async () => {
     const res = await request(app).get('/api/words');

@@ -1,10 +1,17 @@
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { trackSearch, trackWordView, getAnalytics } from '../utils/analyticsUtils.js';
+import { readDictionaryCSV } from '../utils/csvUtils.js';
+import { writeDictionaryCSV } from '../utils/csvWriteUtils.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Analytics endpoint
 export const getAnalyticsData = (req, res) => {
   res.json(getAnalytics());
 };
-import path from 'path';
-import fs from 'fs';
 // Export as JSON
 export const exportJSON = async (req, res) => {
   try {
@@ -33,8 +40,6 @@ export const importCSV = (req, res) => {
     res.json({ message: 'Dictionary imported' });
   });
 };
-import { readDictionaryCSV } from '../utils/csvUtils.js';
-import { writeDictionaryCSV } from '../utils/csvWriteUtils.js';
 
 export const getAllWords = async (req, res) => {
   try {
