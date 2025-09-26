@@ -37,8 +37,11 @@ export async function apiFetch(path, options = {}) {
 
 export const dictionaryService = {
   list: () => apiFetch('/words'),
+  search: (query) => apiFetch(`/search?query=${encodeURIComponent(query)}`),
   add: (data) => apiFetch('/words', { method: 'POST', body: JSON.stringify(data) }),
   update: (word, data) => apiFetch(`/words/${encodeURIComponent(word)}`, { method: 'PUT', body: JSON.stringify(data) }),
   remove: (word) => apiFetch(`/words/${encodeURIComponent(word)}`, { method: 'DELETE' }),
   analytics: () => apiFetch('/analytics'),
+  trackSearch: (query) => apiFetch('/analytics/search', { method: 'POST', body: JSON.stringify({ query }) }),
+  trackView: (word) => apiFetch('/analytics/view', { method: 'POST', body: JSON.stringify({ word }) }),
 };

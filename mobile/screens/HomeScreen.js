@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, TextInput, Pressable, FlatList, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { dictionaryService } from '../services/api';
@@ -14,7 +14,8 @@ export default function HomeScreen({ navigation }) {
     setError('');
     try {
       const data = await dictionaryService.list();
-      setWords(data || []);
+      const items = Array.isArray(data) ? data : data?.items;
+      setWords(items || []);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -24,10 +25,32 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => { load(); }, []);
 
-  const filtered = words.filter(w =>
-    w.word?.toLowerCase().includes(search.toLowerCase()) ||
-    w.definition?.toLowerCase().includes(search.toLowerCase())
-  );
+  // Debounced search against backend
+  const debounceRef = useRef(null);
+  useEffect(() => {
+    if (!search.trim()) {
+      // Reset to full list when search cleared
+      load();
+      return;
+    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const data = await dictionaryService.search(search.trim());
+        const items = Array.isArray(data) ? data : data?.items;
+        setWords(items || []);
+        // best-effort analytics (server already tracks in search endpoint too)
+        dictionaryService.trackSearch(search.trim()).catch(() => {});
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    }, 300);
+    return () => debounceRef.current && clearTimeout(debounceRef.current);
+  }, [search]);
 
   return (
     <SafeAreaView style={styles.container}>

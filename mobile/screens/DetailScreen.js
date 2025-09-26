@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { dictionaryService } from '../services/api';
 
 export default function DetailScreen({ route, navigation }) {
   const { word } = route.params;
+
+  useEffect(() => {
+    if (word?.word) {
+      dictionaryService.trackView(word.word).catch(() => {});
+    }
+  }, [word?.word]);
 
   const remove = async () => {
     Alert.alert('Delete Word', `Are you sure you want to delete "${word.word}"?`, [

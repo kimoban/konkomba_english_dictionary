@@ -11,6 +11,7 @@ import {
 	getAnalyticsData,
 	trackSearchQuery,
 	trackWord,
+	searchWords,
 } from '../controllers/dictionaryController.js';
 
 const router = express.Router();
@@ -30,6 +31,7 @@ router.post('/import/csv', upload.single('file'), importCSV);
 
 // CRUD routes
 router.get('/words', getAllWords);
+router.get('/search', searchWords);
 router.post('/words', addWord);
 router.put('/words/:word', editWord);
 router.delete('/words/:word', deleteWord);

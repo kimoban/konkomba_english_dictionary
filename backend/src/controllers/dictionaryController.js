@@ -43,8 +43,30 @@ export const importCSV = (req, res) => {
 
 export const getAllWords = async (req, res) => {
   try {
-    const words = await readDictionaryCSV();
-    // Optionally track all fetches as a view
+    let words = await readDictionaryCSV();
+    // Optional server-side pagination and sorting
+    const page = parseInt(req.query.page || '1', 10);
+    const pageSize = parseInt(req.query.pageSize || '0', 10); // 0 or missing = no pagination
+    const sortBy = (req.query.sortBy || '').toString(); // e.g., 'word' or 'definition'
+    const order = (req.query.order || 'asc').toLowerCase() === 'desc' ? 'desc' : 'asc';
+
+    if (sortBy === 'word' || sortBy === 'definition') {
+      words.sort((a, b) => {
+        const av = (a[sortBy] || '').toString().toLowerCase();
+        const bv = (b[sortBy] || '').toString().toLowerCase();
+        if (av < bv) return order === 'asc' ? 1 * -1 : 1;
+        if (av > bv) return order === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    if (pageSize && pageSize > 0) {
+      const total = words.length;
+      const start = (page - 1) * pageSize;
+      const items = words.slice(start, start + pageSize);
+      return res.json({ items, total, page, pageSize });
+    }
+
     res.json(words);
   } catch (err) {
     res.status(500).json({ error: 'Failed to load dictionary' });
@@ -112,5 +134,32 @@ export const deleteWord = async (req, res) => {
     res.json({ message: 'Word deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete word' });
+  }
+};
+
+// Search words by query with optional pagination
+export const searchWords = async (req, res) => {
+  try {
+    const query = (req.query.query || '').toString().trim();
+    if (!query) return res.status(400).json({ error: 'Query is required' });
+    const page = parseInt(req.query.page || '1', 10);
+    const pageSize = parseInt(req.query.pageSize || '20', 10);
+    const words = await readDictionaryCSV();
+
+    const q = query.toLowerCase();
+    const filtered = words.filter(w =>
+      (w.word || '').toLowerCase().includes(q) ||
+      (w.definition || '').toLowerCase().includes(q)
+    );
+
+    // Track search in analytics (best-effort)
+    try { trackSearch(query); } catch {}
+
+    const total = filtered.length;
+    const start = (page - 1) * pageSize;
+    const items = filtered.slice(start, start + pageSize);
+    res.json({ items, total, page, pageSize });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to search' });
   }
 };
