@@ -1,6 +1,7 @@
 
 import express from 'express';
 import cors from 'cors';
+import { fileURLToPath } from 'url';
 
 
 import dictionaryRoutes from './routes/dictionaryRoutes.js';
@@ -19,7 +20,12 @@ app.get('/', (req, res) => {
 // API routes
 app.use('/api', dictionaryRoutes);
 
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Export app for tests; start server only if run directly
+export default app;
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}

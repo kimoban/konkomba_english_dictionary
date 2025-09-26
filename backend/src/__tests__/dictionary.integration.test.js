@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../src/app.js';
+import app from '../app.js';
 describe('Dictionary API (integration)', () => {
   it('should add and delete a word', async () => {
     // Add

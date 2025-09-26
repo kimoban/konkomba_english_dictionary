@@ -1,7 +1,7 @@
 
-# Konkomba English Dictionary App
+# Konkomba English Dictionary (React Native + Backend)
 
-A modern, full-featured dictionary app for the Konkomba Language (Likpakpaaln) with a React frontend and Node.js/Express backend.
+A modern dictionary app for the Konkomba Language (Likpakpaaln), built primarily as a React Native mobile app with Expo, backed by a Node.js/Express API.
 
 ---
 
@@ -23,24 +23,15 @@ konkomba_english_dictionary/
 │   ├── __tests__/                # Backend tests
 │   ├── package.json
 │   └── ...
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── WordTable.js
-│   │   │   ├── WordForm.js
-│   │   │   ├── SearchBar.js
-│   │   │   ├── ExportImportBar.js
-│   │   │   └── WordOfTheDay.js
-│   │   ├── pages/
-│   │   │   ├── HomePage.js
-│   │   │   └── WordDetailPage.js
-│   │   ├── services/
-│   │   │   └── dictionaryService.js
-│   │   └── __tests__/
-│   ├── public/
-│   │   ├── index.html
-│   │   ├── manifest.json
-│   │   └── service-worker.js
+├── mobile/
+│   ├── App.js                 # Expo entry (RN Navigation)
+│   ├── screens/
+│   │   ├── HomeScreen.js
+│   │   ├── DetailScreen.js
+│   │   └── EditScreen.js
+│   ├── services/
+│   │   └── api.js             # Shared API helper for backend calls
+│   ├── app.json               # Expo config (extra.apiBaseUrl)
 │   ├── package.json
 │   └── ...
 ├── data/
@@ -54,7 +45,7 @@ konkomba_english_dictionary/
 
 ---
 
-## Features
+## Features (mobile)
 
 ---
 
@@ -154,7 +145,7 @@ export default function WordTable({ words, onRowClick, onEdit, onDelete }) {
 
 ---
 
-## Getting Started
+## Getting Started (mobile)
 
 ### Prerequisites
 
@@ -163,37 +154,16 @@ export default function WordTable({ words, onRowClick, onEdit, onDelete }) {
 
 ### Setup
 
-1. **Install backend dependencies:**
+1. Backend (API)
 
-   ```sh
-   cd backend
-   npm install
-   ```
+   - From `backend`: `npm install` then `npm start` (default <http://localhost:5001>)
 
-2. **Install frontend dependencies:**
+2. Mobile (Expo)
 
-   ```sh
-   cd ../frontend
-   npm install
-   ```
-
-3. **Start backend server:**
-
-   ```sh
-   cd ../backend
-   npm start
-   ```
-
-   (Default: [http://localhost:5000](http://localhost:5000))
-
-4. **Start frontend app:**
-
-   ```sh
-   cd ../frontend
-   npm start
-   ```
-
-   (Default: [http://localhost:3000](http://localhost:3000))
+   - From `mobile/`: `npm install` then `npx expo start`
+   - Press `a` for Android, `i` for iOS (macOS), or `w` for web
+   - If testing on a physical device, set API base via PowerShell before start:
+     - `$env:EXPO_PUBLIC_API_BASE_URL = "http://<your-LAN-IP>:5001/api"`
 
 ---
 
@@ -216,20 +186,19 @@ npm test
 
 ---
 
-## Progressive Web App (PWA)
+## Notes
 
-- The app is installable on desktop and mobile.
-- Offline support via service worker.
+- Web PWA has been removed from the core; focus is on mobile via Expo.
 
 ---
 
-## Accessibility
+## Accessibility (mobile)
 
 - Semantic HTML, ARIA labels, keyboard navigation, and color contrast.
 
 ---
 
-## Analytics
+## Analytics (backend-driven)
 
 - Tracks search queries and word views (backend, JSON-based).
 
@@ -241,6 +210,6 @@ Pull requests are welcome! Please open issues for bugs or feature requests.
 
 ---
 
-## License by
+## License
 
-@kimoban [Isaiah Kimoban]
+MIT — © @kimoban (Isaiah Kimoban)
