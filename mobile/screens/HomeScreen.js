@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, Pressable, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Pressable, FlatList, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { dictionaryService } from '../services/api';
 
 export default function HomeScreen({ navigation }) {

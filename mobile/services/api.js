@@ -1,4 +1,23 @@
-export const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'http://localhost:5001/api';
+import Constants from 'expo-constants';
+
+// Try to infer the host IP from the Expo dev server so device can reach the backend without manual config
+const hostFromExpo = (() => {
+  const uri = Constants.expoConfig?.hostUri || Constants.manifest?.debuggerHost;
+  if (uri && typeof uri === 'string') {
+    const host = uri.split(':')[0];
+    if (host && host !== 'localhost' && host !== '127.0.0.1') {
+      return `http://${host}:5001/api`;
+    }
+  }
+  return undefined;
+})();
+
+export const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_BASE_URL ||
+  Constants.expoConfig?.extra?.apiBaseUrl ||
+  Constants.manifest?.extra?.apiBaseUrl ||
+  hostFromExpo ||
+  'http://localhost:5001/api';
 
 export async function apiFetch(path, options = {}) {
   const res = await fetch(`${API_BASE_URL}${path}`, {

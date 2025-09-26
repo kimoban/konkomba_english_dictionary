@@ -20,7 +20,7 @@
       "bundler": "metro"
     },
     "extra": {
-      "apiBaseUrl": "http://localhost:5001/api"
+      "apiBaseUrl": "http://10.146.217.138:5001/api"
     }
   }
 }

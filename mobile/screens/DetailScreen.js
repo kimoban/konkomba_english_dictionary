@@ -1,5 +1,6 @@
 import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Pressable, Alert } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { dictionaryService } from '../services/api';
 
 export default function DetailScreen({ route, navigation }) {
